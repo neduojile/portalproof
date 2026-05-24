@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+
+  id            String   @id @default(cuid())
+
+  fullName      String
+
+  email         String   @unique
+
+  walletAddress String?  @unique
+
+  role          String   @default("student")
+
+  createdAt     DateTime @default(now())
+
+  credentials   Credential[]
+}
+
+model Institution {
+
+  id            String   @id @default(cuid())
+
+  name          String
+
+  email         String   @unique
+
+  wallet        String?
+
+  createdAt     DateTime @default(now())
+
+  credentials   Credential[]
+}
+
+model Credential {
+
+  id                String   @id @default(cuid())
+
+  title             String?
+
+  recipientName     String
+
+  recipientEmail    String
+
+  course            String
+
+  grade             String?
+
+  issuedAt          DateTime @default(now())
+
+  qrCode            String?
+
+  certificateHash   String?
+
+  blockchainHash    String?
+
+  signature         String?
+
+  issuerWallet      String?
+
+  potFee            Float?
+
+  status            String   @default("pending")
+
+  institutionId     String
+
+  institution       Institution @relation(fields: [institutionId], references: [id])
+
+  userId            String
+
+  user              User @relation(fields: [userId], references: [id])
+
+  verifications     Verification[]
+}
+
+model Verification {
+
+  id             String   @id @default(cuid())
+
+  verifierIp     String?
+
+  verifiedAt     DateTime @default(now())
+
+  success        Boolean  @default(true)
+
+  credentialId   String
+
+  credential     Credential @relation(fields: [credentialId], references: [id])
+}
