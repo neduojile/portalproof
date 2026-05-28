@@ -13,7 +13,7 @@ portaldot = SubstrateInterface(
 
 print("Connected to:", portaldot.chain)
 
-keypair = Keypair.create_from_uri('//Alice')
+Keypair.create_from_mnemonic("YOUR_MNEMONIC")
 
 call = portaldot.compose_call(
     call_module='Balances',

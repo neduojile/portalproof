@@ -12,9 +12,27 @@ export default function VerifyPage() {
   const [result, setResult] =
     useState<any>(null);
 
+  function normalizeCredentialId(
+    value: string
+  ) {
+    const trimmed = value.trim();
+
+    const match = trimmed.match(
+      /(?:[?&]id=|\/verify\/|\/credential\/)([A-Za-z0-9\-_]+)/i
+    );
+
+    return match
+      ? match[1]
+      : trimmed;
+  }
+
   const verifyCredential = async () => {
     try {
       setLoading(true);
+
+      const id = normalizeCredentialId(
+        credentialId
+      );
 
       const response = await fetch(
         "/api/credentials/verify",
@@ -24,7 +42,7 @@ export default function VerifyPage() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            credentialId,
+            credentialId: id,
           }),
         }
       );

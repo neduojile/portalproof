@@ -47,6 +47,9 @@ export default function VerificationPage() {
   const [notFound, setNotFound] =
     useState(false);
 
+  const [errorMessage, setErrorMessage] =
+    useState("");
+
   function generateHash(
     verificationId: string
   ) {
@@ -57,18 +60,39 @@ export default function VerificationPage() {
 
   }
 
+  function normalizeCredentialId(
+    value: string
+  ) {
+    const trimmed = value.trim();
+
+    const match = trimmed.match(
+      /(?:[?&]id=|\/verify\/|\/credential\/)([A-Za-z0-9\-_]+)/i
+    );
+
+    return match
+      ? match[1]
+      : trimmed;
+  }
+
   async function handleVerification(
     searchValue?: string
   ) {
 
-    const query =
-      (searchValue || search).trim();
+    const query = normalizeCredentialId(
+      searchValue || search
+    );
 
-    if (!query) return;
+    if (!query) {
+      setErrorMessage(
+        "Please enter a credential ID."
+      );
+      return;
+    }
 
     try {
 
       setNotFound(false);
+      setErrorMessage("");
 
       const response =
         await fetch(
@@ -82,7 +106,7 @@ export default function VerificationPage() {
             },
 
             body: JSON.stringify({
-              credentialId: query,
+              id: query,
             }),
           }
         );
@@ -91,6 +115,7 @@ export default function VerificationPage() {
         await response.json();
 
       if (
+        response.ok &&
         data.success &&
         data.verified
       ) {
@@ -133,18 +158,26 @@ export default function VerificationPage() {
 
         setNotFound(true);
 
-        toast.error(
-          "Credential not found"
-        );
+        const message =
+          data.message ||
+          "Credential not found";
+
+        setErrorMessage(message);
+
+        toast.error(message);
       }
 
-    } catch (error) {
+    } catch (error: any) {
 
       console.log(error);
 
-      toast.error(
-        "Verification failed"
-      );
+      const message =
+        error?.message ||
+        "Verification failed";
+
+      setErrorMessage(message);
+
+      toast.error(message);
     }
   }
 
@@ -473,6 +506,12 @@ export default function VerificationPage() {
           <h2 className="text-5xl font-bold mb-5">
             Credential Not Found
           </h2>
+
+          {errorMessage && (
+            <p className="text-gray-200 mt-4 max-w-2xl mx-auto">
+              {errorMessage}
+            </p>
+          )}
 
         </motion.div>
 

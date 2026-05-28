@@ -5,7 +5,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 import { execSync } from "child_process";
+
 import { connectBlockchain } from "@/lib/blockchain";
+
+import {
+  issueCredentialOnChain,
+} from "@/src/lib/contract";
 
 export async function POST(
   req: Request
@@ -260,7 +265,7 @@ export async function POST(
 
     // VERIFICATION URL
     const verificationUrl =
-      `http://localhost:3000/verification/${credential.id}`;
+      `http://localhost:3000/verification?id=${credential.id}`;
 
     // QR CODE
     const qrCode =
@@ -281,6 +286,26 @@ export async function POST(
         },
       });
 
+    // SMART CONTRACT PREPARATION
+    const onChainResult =
+      await issueCredentialOnChain(
+
+        updatedCredential.id,
+
+        updatedCredential.recipientEmail,
+
+        String(updatedCredential.title),
+
+        updatedCredential.course,
+
+        String(updatedCredential.grade),
+      );
+
+    console.log(
+      "ONCHAIN RESULT:",
+      onChainResult
+    );
+
     return NextResponse.json({
 
       success: true,
@@ -290,6 +315,9 @@ export async function POST(
 
       blockchain:
         blockchainData,
+
+      onChain:
+        onChainResult,
 
       credential:
         updatedCredential,

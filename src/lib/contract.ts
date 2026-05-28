@@ -1,17 +1,13 @@
-import { ApiPromise, WsProvider } from "@polkadot/api";
+import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
 
 import { ContractPromise } from "@polkadot/api-contract";
 
-import {
-  web3Enable,
-  web3Accounts,
-} from "@polkadot/extension-dapp";
+let api: ApiPromise | null = null;
 
+let contract: ContractPromise | null = null;
 
-
-let api: ApiPromise;
-
-
+const CONTRACT_ADDRESS =
+  "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
 
 export async function connectBlockchain() {
 
@@ -19,55 +15,293 @@ export async function connectBlockchain() {
 
     const provider =
       new WsProvider(
-        "wss://rpc.shibuya.astar.network"
+        "ws://127.0.0.1:9944"
       );
 
     api =
       await ApiPromise.create({
         provider,
       });
+
+    console.log(
+      "CONNECTED TO LOCAL INK NODE"
+    );
   }
 
   return api;
 }
 
+export async function loadContract() {
 
-
-export async function connectWallet() {
-
-  await web3Enable(
-    "PortalProof"
-  );
-
-  const accounts =
-    await web3Accounts();
-
-  return accounts;
-}
-
-
-
-export async function loadContract(
-  contractAddress: string
-) {
+  if (contract) {
+    return contract;
+  }
 
   const api =
     await connectBlockchain();
 
-  const response =
-    await fetch(
-      "/contracts/portalproof_contract.json"
+  const metadata =
+    require(
+      "../../public/contracts/ink/portalproof_contract.json"
     );
 
-  const metadata =
-    await response.json();
-
-  const contract =
+  contract =
     new ContractPromise(
       api,
       metadata,
-      contractAddress
+      CONTRACT_ADDRESS
     );
 
   return contract;
 }
+
+export async function issueCredentialOnChain(
+  credentialId: string,
+  recipient: string,
+  title: string,
+  course: string,
+  grade: string,
+) {
+
+  try {
+
+    const api =
+      await connectBlockchain();
+
+    const contract =
+      await loadContract();
+
+    const keyring =
+      new Keyring({
+        type: "sr25519",
+      });
+
+    const alice =
+      keyring.addFromUri("//Alice");
+
+    const gasLimit =
+      api.registry.createType(
+        "WeightV2",
+        {
+          refTime:
+            "10000000000",
+
+          proofSize:
+            "1000000",
+        }
+      );
+
+    const tx =
+      contract.tx.issueCredential(
+        {
+  gasLimit: gasLimit as any,
+  storageDepositLimit: null,
+},
+        credentialId,
+        recipient,
+        title,
+        course,
+        grade,
+      );
+
+    return new Promise((resolve) => {
+
+      tx.signAndSend(
+        alice,
+
+        (result) => {
+
+          console.log(
+            "ONCHAIN RESULT:",
+            result.toHuman()
+          );
+
+          if (
+            result.status.isInBlock ||
+            result.status.isFinalized
+          ) {
+
+            resolve({
+
+              success: true,
+
+              network:
+                "Local ink! Node",
+
+              credentialId,
+
+              recipient,
+
+              title,
+
+              course,
+
+              grade,
+
+              txHash:
+                result.txHash.toString(),
+
+              contract:
+                contract.address.toString(),
+            });
+          }
+        }
+      );
+    });
+
+  } catch (error) {
+
+    console.log(
+      "BLOCKCHAIN ERROR:",
+      error
+    );
+
+    return {
+
+      success: false,
+
+      message:
+        "Blockchain interaction failed",
+    };
+  }
+}
+
+export async function verifyCredentialOnChain(
+  credentialId: string
+) {
+
+  try {
+
+    const contract =
+      await loadContract();
+
+    const result =
+      await contract.query.verifyCredential(
+
+        CONTRACT_ADDRESS,
+
+        {
+          gasLimit: -1,
+        },
+
+        credentialId
+      );
+
+    return {
+
+      success: true,
+
+      credentialId,
+
+      network:
+        "Local ink! Node",
+
+      result:
+        result.output?.toHuman(),
+
+      contract:
+        contract.address.toString(),
+    };
+
+  } catch (error) {
+
+    console.log(
+      "VERIFY ERROR:",
+      error
+    );
+
+    return {
+
+      success: false,
+    };
+  }
+}
+
+export async function revokeCredentialOnChain(
+  credentialId: string
+) {
+
+  try {
+
+    const api =
+      await connectBlockchain();
+
+    const contract =
+      await loadContract();
+
+    const keyring =
+      new Keyring({
+        type: "sr25519",
+      });
+
+    const alice =
+      keyring.addFromUri("//Alice");
+
+    const gasLimit =
+      api.registry.createType(
+        "WeightV2",
+        {
+          refTime:
+            "10000000000",
+
+          proofSize:
+            "1000000",
+        }
+      );
+
+    const tx =
+      contract.tx.revokeCredential(
+        {
+  gasLimit: gasLimit as any,
+  storageDepositLimit: null,
+
+        },
+
+        credentialId
+      );
+
+    return new Promise((resolve) => {
+
+      tx.signAndSend(
+        alice,
+
+        (result) => {
+
+          console.log(
+            "REVOKE RESULT:",
+            result.toHuman()
+          );
+
+          if (
+            result.status.isInBlock ||
+            result.status.isFinalized
+          ) {
+
+            resolve({
+
+              success: true,
+
+              credentialId,
+
+              txHash:
+                result.txHash.toString(),
+            });
+          }
+        }
+      );
+    });
+
+  } catch (error) {
+
+    console.log(
+      "REVOKE ERROR:",
+      error
+    );
+
+    return {
+
+      success: false,
+    };
+  }
+}
+
