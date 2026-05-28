@@ -233,6 +233,38 @@ POST /api/credentials/revoke
 
 # Screenshots
 
+## Dashboard
+
+![Dashboard](./public/screenshots/dashboard.png)
+
+---
+
+## Credential Issuance
+
+![Issue Credential](./public/screenshots/issue-page.png)
+
+![Issue Credential](./public/screenshots/issue-page2.png)
+
+![Issued Credential](./public/screenshots/issue-page3.png)
+---
+
+## Verification System
+
+![Verification](./public/screenshots/verification-page.png)
+![Verification](./public/screenshots/verification-page2.png)
+
+---
+
+## Developer SDK
+
+![Developer SDK](./public/screenshots/sdk-page.png)
+
+---
+
+## Local ink! Runtime
+
+![ink Runtime](./public/screenshots/ink-node.png)
+
 ## Credential Issuance
 - QR code generation
 - Blockchain hash generation
