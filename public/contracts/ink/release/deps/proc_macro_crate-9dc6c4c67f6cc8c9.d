@@ -1,7 +1,0 @@
-C:\Users\HELLOW\Desktop\portaldot-hackathon\portalproof_contract\target\ink\release\deps\proc_macro_crate-9dc6c4c67f6cc8c9.d: C:\Users\HELLOW\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro-crate-3.5.0\src\lib.rs
-
-C:\Users\HELLOW\Desktop\portaldot-hackathon\portalproof_contract\target\ink\release\deps\libproc_macro_crate-9dc6c4c67f6cc8c9.rlib: C:\Users\HELLOW\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro-crate-3.5.0\src\lib.rs
-
-C:\Users\HELLOW\Desktop\portaldot-hackathon\portalproof_contract\target\ink\release\deps\libproc_macro_crate-9dc6c4c67f6cc8c9.rmeta: C:\Users\HELLOW\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro-crate-3.5.0\src\lib.rs
-
-C:\Users\HELLOW\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\proc-macro-crate-3.5.0\src\lib.rs:

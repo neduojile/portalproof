@@ -1,1 +1,0 @@
-C:\Users\HELLOW\Desktop\portaldot-hackathon\portalproof_contract\target\ink\release\metadata-gen.exe: \\?\C:\Users\HELLOW\AppData\Local\Temp\cargo-contract_6kTZl6\.ink\metadata_gen\main.rs \\?\C:\Users\HELLOW\Desktop\portaldot-hackathon\portalproof_contract\lib.rs

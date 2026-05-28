@@ -1,1 +1,0 @@
-C:\Users\HELLOW\Desktop\portaldot-hackathon\portalproof_contract\target\ink\wasm32-unknown-unknown\release\portalproof_contract.wasm: \\?\C:\Users\HELLOW\Desktop\portaldot-hackathon\portalproof_contract\lib.rs

@@ -45,3 +45,16 @@ next-env.d.ts
 
 # blockchain sdk
 polkadot-sdk/
+# Rust build artifacts
+public/contracts/ink/release/
+public/contracts/ink/wasm32-unknown-unknown/
+
+# Rust targets
+target/
+**/target/
+
+# Next.js
+.next/
+
+# Node
+node_modules/
