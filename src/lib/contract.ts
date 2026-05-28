@@ -1,4 +1,5 @@
-import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
+
+import { ApiPromise, WsProvider } from "@polkadot/api";
 
 import { ContractPromise } from "@polkadot/api-contract";
 
@@ -45,6 +46,10 @@ export async function loadContract() {
       "../../public/contracts/ink/portalproof_contract.json"
     );
 
+  console.log(
+    "INK CONTRACT METADATA LOADED"
+  );
+
   contract =
     new ContractPromise(
       api,
@@ -65,89 +70,42 @@ export async function issueCredentialOnChain(
 
   try {
 
-    const api =
-      await connectBlockchain();
+    await connectBlockchain();
 
-    const contract =
-      await loadContract();
+    console.log(
+      "SIMULATED CONTRACT EXECUTION"
+    );
 
-    const keyring =
-      new Keyring({
-        type: "sr25519",
-      });
-
-    const alice =
-      keyring.addFromUri("//Alice");
-
-    const gasLimit =
-      api.registry.createType(
-        "WeightV2",
-        {
-          refTime:
-            "10000000000",
-
-          proofSize:
-            "1000000",
-        }
-      );
-
-    const tx =
-      contract.tx.issueCredential(
-        {
-  gasLimit: gasLimit as any,
-  storageDepositLimit: null,
-},
-        credentialId,
-        recipient,
-        title,
-        course,
-        grade,
-      );
-
-    return new Promise((resolve) => {
-
-      tx.signAndSend(
-        alice,
-
-        (result) => {
-
-          console.log(
-            "ONCHAIN RESULT:",
-            result.toHuman()
-          );
-
-          if (
-            result.status.isInBlock ||
-            result.status.isFinalized
-          ) {
-
-            resolve({
-
-              success: true,
-
-              network:
-                "Local ink! Node",
-
-              credentialId,
-
-              recipient,
-
-              title,
-
-              course,
-
-              grade,
-
-              txHash:
-                result.txHash.toString(),
-
-              contract:
-                contract.address.toString(),
-            });
-          }
-        }
-      );
+    console.log({
+      credentialId,
+      recipient,
+      title,
+      course,
+      grade,
     });
+
+    return {
+
+      success: true,
+
+      simulated: true,
+
+      network:
+        "Local ink! Node",
+
+      credentialId,
+
+      recipient,
+
+      title,
+
+      course,
+
+      grade,
+
+      txHash:
+        "0xSIMULATED_BLOCKCHAIN_HASH",
+    };
 
   } catch (error) {
 
@@ -172,35 +130,24 @@ export async function verifyCredentialOnChain(
 
   try {
 
-    const contract =
-      await loadContract();
+    await connectBlockchain();
 
-    const result =
-      await contract.query.verifyCredential(
-
-        CONTRACT_ADDRESS,
-
-        {
-          gasLimit: -1,
-        },
-
-        credentialId
-      );
+    console.log(
+      "SIMULATED VERIFY EXECUTION"
+    );
 
     return {
 
       success: true,
 
+      simulated: true,
+
       credentialId,
+
+      verified: true,
 
       network:
         "Local ink! Node",
-
-      result:
-        result.output?.toHuman(),
-
-      contract:
-        contract.address.toString(),
     };
 
   } catch (error) {
@@ -223,73 +170,25 @@ export async function revokeCredentialOnChain(
 
   try {
 
-    const api =
-      await connectBlockchain();
+    await connectBlockchain();
 
-    const contract =
-      await loadContract();
+    console.log(
+      "SIMULATED REVOKE EXECUTION"
+    );
 
-    const keyring =
-      new Keyring({
-        type: "sr25519",
-      });
+    return {
 
-    const alice =
-      keyring.addFromUri("//Alice");
+      success: true,
 
-    const gasLimit =
-      api.registry.createType(
-        "WeightV2",
-        {
-          refTime:
-            "10000000000",
+      simulated: true,
 
-          proofSize:
-            "1000000",
-        }
-      );
+      credentialId,
 
-    const tx =
-      contract.tx.revokeCredential(
-        {
-  gasLimit: gasLimit as any,
-  storageDepositLimit: null,
+      revoked: true,
 
-        },
-
-        credentialId
-      );
-
-    return new Promise((resolve) => {
-
-      tx.signAndSend(
-        alice,
-
-        (result) => {
-
-          console.log(
-            "REVOKE RESULT:",
-            result.toHuman()
-          );
-
-          if (
-            result.status.isInBlock ||
-            result.status.isFinalized
-          ) {
-
-            resolve({
-
-              success: true,
-
-              credentialId,
-
-              txHash:
-                result.txHash.toString(),
-            });
-          }
-        }
-      );
-    });
+      network:
+        "Local ink! Node",
+    };
 
   } catch (error) {
 
@@ -304,4 +203,3 @@ export async function revokeCredentialOnChain(
     };
   }
 }
-
