@@ -231,6 +231,97 @@ POST /api/credentials/revoke
 
 
 
+# Developer SDK
+
+PortalProof is being developed with developer usability in mind.
+
+The platform exposes reusable blockchain interaction utilities that allow future ecosystem projects to integrate credential verification with minimal setup.
+
+Example integration:
+
+```typescript
+import {
+  verifyCredentialOnChain
+} from "@/src/lib/contract";
+
+const result =
+  await verifyCredentialOnChain(
+    credentialId
+  );
+```
+
+Credential verification can be integrated with only a few lines of code.
+
+Future releases will expose a dedicated SDK package for ecosystem developers.
+
+# Smart Contract Development
+
+PortalProof includes a custom ink! smart contract for credential lifecycle management.
+
+Implemented functionality includes:
+
+* Credential issuance
+* Credential verification
+* Credential revocation
+* Credential status checking
+
+Contract methods:
+
+```text
+issue_credential()
+verify_credential()
+revoke_credential()
+is_revoked()
+```
+
+The contract was compiled successfully and contract artifacts were generated for deployment and testing.
+
+# Infrastructure-Focused MVP
+
+PortalProof is intentionally positioned as infrastructure rather than a consumer-facing application.
+
+Success metrics for this MVP focus on:
+
+* Clean architecture
+* Blockchain integration
+* Verification workflow reliability
+* Smart contract readiness
+* Developer extensibility
+* Credential authenticity
+
+The current MVP demonstrates the complete credential lifecycle from issuance to verification while establishing the foundation for future onchain execution within the Portaldot ecosystem.
+
+# Current Blockchain Status
+
+The MVP currently demonstrates:
+
+* Successful Portaldot connectivity
+* Blockchain metadata retrieval
+* Fee estimation workflows
+* Local ink! runtime connectivity
+* Smart contract compilation
+* Contract artifact generation
+* Credential lifecycle simulation
+* QR-based verification flow
+
+To ensure stable demonstrations during the hackathon, credential issuance currently uses a simulated execution layer while preserving the full blockchain integration architecture. Future releases will transition to full production onchain credential execution.
+
+# Why PortalProof
+
+Educational institutions, certification providers, training organizations, and employers often face challenges validating the authenticity of academic and professional credentials.
+
+PortalProof addresses this challenge by providing:
+
+* Tamper-resistant credential records
+* Instant verification workflows
+* QR-enabled certificate validation
+* Blockchain-backed auditability
+* Institution-friendly credential management
+* Developer-friendly integration architecture
+
+The long-term vision is to become a reusable credential verification layer for applications built throughout the Portaldot ecosystem.
+
+
 # Screenshots
 
 ## Dashboard
@@ -281,13 +372,21 @@ POST /api/credentials/revoke
 
 # Future Improvements
 
-- Real-time onchain verification
-- Multi-wallet support
-- Institution onboarding portal
-- NFT credential support
-- Decentralized identity integration
-- Advanced analytics dashboard
-- Production-grade deployment
+* Full production onchain credential execution
+* Universal PortalProof SDK package
+* Real-time blockchain verification
+* Multi-wallet support
+* Institution onboarding portal
+* NFT credential issuance
+* Decentralized identity integration
+* Cross-project Portaldot ecosystem integrations
+* Advanced analytics dashboard
+* Automated verifier APIs
+* Production deployment
+* Ecosystem developer plugins
+* Mobile verification support
+* Account abstraction wallet integration
+* Verifiable credential standards support
 
 
 
