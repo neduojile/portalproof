@@ -19,20 +19,6 @@ mod portalproof_contract {
     feature = "std",
     derive(scale_info::TypeInfo, ink::storage::traits::StorageLayout)
 )]
-    pub struct Credential {
-
-        recipient: AccountId,
-
-        title: String,
-
-        course: String,
-
-        grade: String,
-
-        issuer: AccountId,
-
-        revoked: bool,
-    }
 
     #[ink(storage)]
     pub struct PortalproofContract {
@@ -68,20 +54,6 @@ mod portalproof_contract {
 
         ) {
 
-            let credential = Credential {
-
-                recipient,
-
-                title,
-
-                course,
-
-                grade,
-
-                issuer: self.env().caller(),
-
-                revoked: false,
-            };
 
             self.credentials.insert(
                 credential_id,

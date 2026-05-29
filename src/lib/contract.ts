@@ -176,20 +176,7 @@ export async function revokeCredentialOnChain(
       "SIMULATED REVOKE EXECUTION"
     );
 
-    return {
-
-      success: true,
-
-      simulated: true,
-
-      credentialId,
-
-      revoked: true,
-
-      network:
-        "Local ink! Node",
-    };
-
+    
   } catch (error) {
 
     console.log(
