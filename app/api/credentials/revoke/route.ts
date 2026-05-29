@@ -5,9 +5,7 @@ import { prisma } from "@/lib/prisma";
 export async function POST(
   req: Request
 ) {
-
   try {
-
     const body =
       await req.json();
 
@@ -16,7 +14,6 @@ export async function POST(
     } = body;
 
     if (!credentialId) {
-
       return NextResponse.json(
         {
           success: false,
@@ -29,7 +26,6 @@ export async function POST(
       );
     }
 
-    // CHECK EXISTENCE
     const existingCredential =
       await prisma.credential.findUnique({
         where: {
@@ -38,7 +34,6 @@ export async function POST(
       });
 
     if (!existingCredential) {
-
       return NextResponse.json(
         {
           success: false,
@@ -51,34 +46,25 @@ export async function POST(
       );
     }
 
-    // REVOKE
     const revokedCredential =
       await prisma.credential.update({
         where: {
           id: credentialId,
         },
-
         data: {
-          revoked: true,
-
           status: "revoked",
         },
       });
 
     return NextResponse.json({
-
       success: true,
-
       message:
         "Credential revoked successfully",
-
       credential:
         revokedCredential,
     });
-
   } catch (error) {
-
-    console.log(error);
+    console.error(error);
 
     return NextResponse.json(
       {
