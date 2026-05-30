@@ -324,11 +324,14 @@ The long-term vision is to become a reusable credential verification layer for a
 
 # Screenshots
 
+
 ## Dashboard
 
 ![Dashboard](./public/screenshots/dashboard.png)
 
 ---
+
+
 
 ## Credential Issuance
 
@@ -339,22 +342,50 @@ The long-term vision is to become a reusable credential verification layer for a
 ![Issued Credential](./public/screenshots/issue-page3.png)
 ---
 
+
+
+## Database Persistence
+
+### PostgreSQL + Prisma Studio
+
+![Prisma Studio](./public/screenshots/prisma-studio.png)
+
+![Prisma Studio](./public/screenshots/prisma-studio.png)
+
+PortalProof stores issued credentials, user records, institutions, and verification data in PostgreSQL through Prisma ORM.
+
+This screenshot shows credential records successfully persisted and accessible through Prisma Studio, demonstrating backend data integrity and credential lifecycle management.
+---
+
+
 ## Verification System
 
 ![Verification](./public/screenshots/verification-page.png)
+
 ![Verification](./public/screenshots/verification-page2.png)
 
+![Verification](./public/screenshots/verification-page3.png)
+
 ---
+
+
 
 ## Developer SDK
 
 ![Developer SDK](./public/screenshots/sdk-page.png)
 
+[Developer SDK](./public/screenshots/sdk-page2.png)
+
 ---
+
+
 
 ## Local ink! Runtime
 
 ![ink Runtime](./public/screenshots/ink-node.png)
+---
+
+
 
 ## Credential Issuance
 - QR code generation
